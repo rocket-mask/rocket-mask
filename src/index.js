@@ -38,7 +38,6 @@ MaskPlace.create = function (test, idx) {
   return new MaskPlaceStatic(test, idx);
 };
 
-const isBackspace = keycode => keycode === 8;
 const KEYS = {
   backspace: 8,
   'tab':	9,
