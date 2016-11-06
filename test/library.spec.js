@@ -2,7 +2,7 @@
 import chai from 'chai';
 import spies from 'chai-spies';
 import simulant from 'simulant';
-import Nebo15Mask from '../lib/nebo15-mask.js';
+import { MaskedInput as Nebo15Mask } from '../lib/nebo15-mask.js';
 
 chai.use(spies);
 chai.expect();
