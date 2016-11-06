@@ -77,7 +77,7 @@ export default class Mask {
     const leftPlaces = this.__modelSize - model.length;
 
     let insertChunk = char.split('').map((i, idx) => {
-      const nextMask = this.mask[this._getMaskPosition(modelPosition + idx + 1)];
+      const nextMask = this.mask[this._getMaskPosition(modelPosition + idx)];
 
       return nextMask.test(i) ? i : '';
     }).join('').slice(0, leftPlaces);

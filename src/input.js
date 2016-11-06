@@ -67,8 +67,6 @@ export default class MaskedInput extends Core {
     e = e || window.event;
     const keyCode = e.keyCode || e.which;
 
-    console.log('keydown', keyCode, e.which);
-
     if (isUndo(e)) {
       e.preventDefault();
       return this.undo();
