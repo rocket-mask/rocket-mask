@@ -1,6 +1,8 @@
 import Core from './core';
 
 const KEYS = {
+  Z: 90,
+  Y: 89,
   backspace: 8,
   tab:	9,
   enter: 13,
@@ -22,17 +24,31 @@ const KEYS = {
   delete:	46
 };
 
+function isUndo(e) {
+  return (e.ctrlKey || e.metaKey) && e.keyCode === (e.shiftKey ? KEYS.Y : KEYS.Z);
+}
+
+function isRedo(e) {
+  return (e.ctrlKey || e.metaKey) && e.keyCode === (e.shiftKey ? KEYS.Z : KEYS.Y);
+}
+
+const getClipboardData = e => (e.clipboardData || window.clipboardData).getData('Text');
+
 export default class MaskedInput extends Core {
 
   constructor(element, mask) {
     super(mask);
 
     this._element = element;
-    this.onInputChange = this.onInputChange.bind(this);
+    this.onChange = this.onChange.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
+    this.onPaste = this.onPaste.bind(this);
+    this.onCut = this.onCut.bind(this);
 
-    this._element.addEventListener('change', this.onInputChange);
+    this._element.addEventListener('change', this.onChange);
     this._element.addEventListener('keydown', this.onKeydown);
+    this._element.addEventListener('paste', this.onPaste);
+    this._element.addEventListener('cut', this.onCut);
   }
   get viewValue() {
     return this._element.value;
@@ -41,7 +57,7 @@ export default class MaskedInput extends Core {
     this._element.value = value;
   }
 
-  onInputChange(e) {
+  onChange(e) {
     const { value } = e.target;
 
     this.model = value;
@@ -49,7 +65,17 @@ export default class MaskedInput extends Core {
   onKeydown(e) {
     const keyCode = e.keyCode;
 
-    if (e.ctrlKey || e.altKey || e.metaKey || (keyCode < 46 && [KEYS.backspace].indexOf(keyCode) === -1)) return;
+    if (isUndo(e)) {
+      e.preventDefault();
+      return this.undo();
+    }
+    if (isRedo(e)) {
+      e.preventDefault();
+      return this.redo();
+    }
+
+    if (e.ctrlKey || e.altKey || e.metaKey || (keyCode < 46 && [KEYS.backspace].indexOf(keyCode) === -1)) return null;
+    console.log('on keydown');
     e.preventDefault();
     const selection = this.selection;
 
@@ -65,6 +91,25 @@ export default class MaskedInput extends Core {
       if (selection.start !== selection.end) this.remove(selection.start, selection.end);
       this.cursor = this.add(String.fromCharCode(keyCode), selection.start);
     }
+  }
+  onPaste(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    // Get pasted data via clipboard API
+    const pastedData = getClipboardData(e);
+    const selection = this.selection;
+
+    this.cursor = this.add(pastedData, selection.start);
+  }
+  onCut(e) {
+    const selection = this.selection;
+    const value = this.value;
+
+    setTimeout(() => {
+      this.value = value;
+      this.cursor = this.remove(selection.start, selection.end);
+    });
   }
 
   get cursor() {

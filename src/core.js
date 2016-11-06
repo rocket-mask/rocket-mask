@@ -4,6 +4,8 @@ export default class Mask {
   constructor(mask) {
     this._name = 'nebo15-mask';
     this._mask = Mask.parseMask(mask);
+    this._states = [];
+    this._stateIdx = -1;
   }
 
   // public interfaces
@@ -74,9 +76,13 @@ export default class Mask {
     const model = this.model;
     const leftPlaces = this.__modelSize - model.length;
     const insertChunk = char.slice(0, leftPlaces) || '';
+
+    if (insertChunk.length === 0) return position;
     const newModel = model.slice(0, modelPosition) + insertChunk + model.slice(modelPosition);
 
     this.model = newModel;
+    this.saveState(newModel);
+
     return this._getCursorPosition(modelPosition + (insertChunk.length - 1));
   }
   /**
@@ -93,8 +99,11 @@ export default class Mask {
 
     const startModel = this._getModelPosition(start);
     const endModel = this._getModelPosition(end);
+    const newModel = model.slice(0, startModel) + model.slice(endModel);
 
-    this.model = model.slice(0, startModel) + model.slice(endModel);
+    this.model = newModel;
+    this.saveState(newModel);
+
     return start;
   }
   backspace(position) {
@@ -108,6 +117,24 @@ export default class Mask {
     const prevCharacter = this._getModelPosition(position);
 
     return this.remove(position, this._getCursorPosition(prevCharacter));
+  }
+  undo() {
+    if (this._stateIdx === -1) return;
+
+    this._stateIdx -= 1;
+    this.model = this._states[this._stateIdx];
+  }
+  redo() {
+    const nextState = this._states[this._stateIdx + 1];
+
+    if (!nextState) return;
+    this._stateIdx++;
+    this.model = nextState;
+  }
+  saveState(state) {
+    this._states = this._states.slice(0, this._stateIdx + 1);
+    this._states.push(state);
+    this._stateIdx = this._states.length - 1;
   }
 
   get name() {

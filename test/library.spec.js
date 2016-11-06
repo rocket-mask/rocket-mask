@@ -128,6 +128,17 @@ describe('core', () => {
       instance.add('3', 3); // 12-34
       expect(instance.value).to.equal('12-34');
     });
+    it('should add characters at position', () => {
+      const instance = new Nebo15Mask(document.createElement('input'), '1111 1111 1111 1111');
+
+      instance.model = '2222';
+      instance.add('3333', 2);
+      expect(instance.value).to.equal('2233 3322 ');
+
+      instance.model = '2222';
+      instance.add('3333', 4);
+      expect(instance.value).to.equal('2222 3333 ');
+    });
     it('should support adding string at position', () => {
       instance.value = '14';
       instance.add('23', 1); // 12-34
@@ -140,7 +151,6 @@ describe('core', () => {
     });
     it('should test char by pattern', () => {
       instance = new Nebo15Mask(document.createElement('input'), 'ww 1111');
-      console.log(instance.mask);
       instance.add('a');
       instance.add('1');
       expect(instance.value).to.equal('a');
@@ -207,6 +217,53 @@ describe('core', () => {
       instance.value = '12-34';
       instance.backspace(0);
       expect(instance.value).to.equal('12-34');
+    });
+  });
+  describe('undo/redo', () => {
+    beforeEach(() => {
+      instance.add('12');
+      instance.add('3');
+      instance.add('4');
+      expect(instance._states).to.deep.equal([
+        '12',
+        '123',
+        '1234'
+      ]);
+    });
+    it('should save states on add/remove actions', () => {
+      expect(instance._states).to.deep.equal([
+        '12',
+        '123',
+        '1234'
+      ]);
+    });
+    it('should not remove state on undo action', () => {
+      instance.undo();
+      expect(instance._states).to.deep.equal([
+        '12',
+        '123',
+        '1234'
+      ]);
+    });
+    it('should change model on undo action', () => {
+      instance.undo();
+      expect(instance.model).to.equal('123');
+    });
+    it('should support redo action', () => {
+      instance.undo();
+      expect(instance.model).to.equal('123');
+      instance.redo();
+      expect(instance.model).to.equal('1234');
+    });
+    it('should clear state, then add new state not at the end of state machine', () => {
+      instance.undo();
+      instance.undo();
+      expect(instance.model).to.equal('12');
+      instance.add('5');
+      expect(instance._states).to.deep.equal([
+        '12',
+        '125'
+      ]);
     });
   });
 });
