@@ -10,3 +10,4 @@ TODO:
 - [ ] Delete selection
 - [ ] Insert when part of mask is selected
 - [ ] Past/Cut
+- [ ] Escaping mask characters (eg. \1) to be able to use mask chars as static symbols
