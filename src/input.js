@@ -64,7 +64,10 @@ export default class MaskedInput extends Core {
     this.model = value;
   }
   onKeydown(e) {
-    const keyCode = e.keyCode;
+    e = e || window.event;
+    const keyCode = e.keyCode || e.which;
+
+    console.log('keydown', keyCode, e.which);
 
     if (isUndo(e)) {
       e.preventDefault();
@@ -75,11 +78,15 @@ export default class MaskedInput extends Core {
       return this.redo();
     }
 
+    if (keyCode === 0) {
+      return e.preventDefault(); // iOS Safari bug :(
+    }
     if (e.ctrlKey || e.altKey || e.metaKey ||
       (keyCode < 46 && [KEYS.backspace, KEYS.space].indexOf(keyCode) === -1)
     ) return null;
 
     e.preventDefault();
+
     const selection = this.selection;
 
     if (keyCode === KEYS.backspace) {

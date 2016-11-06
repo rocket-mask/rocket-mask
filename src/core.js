@@ -78,6 +78,7 @@ export default class Mask {
 
     let insertChunk = char.split('').map((i, idx) => {
       const nextMask = this.mask[this._getMaskPosition(modelPosition + idx + 1)];
+
       return nextMask.test(i) ? i : '';
     }).join('').slice(0, leftPlaces);
 
