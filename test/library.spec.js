@@ -123,6 +123,11 @@ describe('core', () => {
       instance.add('w'); // 12-34
       expect(instance.value).to.equal('');
     });
+    it('should do nothing on wrong char adding', () => {
+      instance.value = '12-3';
+      instance.add('w', 0); // 12-34
+      expect(instance.value).to.equal('12-3');
+    });
     it('should add characters at position', () => {
       instance.value = '12-4';
       instance.add('3', 3); // 12-34

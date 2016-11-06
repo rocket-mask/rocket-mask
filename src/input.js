@@ -12,6 +12,7 @@ const KEYS = {
   pauseBreak:	19,
   capsLock:	20,
   escape:	27,
+  space: 32,
   pageUp:	33,
   pageDown:	34,
   end:	35,
@@ -74,8 +75,10 @@ export default class MaskedInput extends Core {
       return this.redo();
     }
 
-    if (e.ctrlKey || e.altKey || e.metaKey || (keyCode < 46 && [KEYS.backspace].indexOf(keyCode) === -1)) return null;
-    console.log('on keydown');
+    if (e.ctrlKey || e.altKey || e.metaKey ||
+      (keyCode < 46 && [KEYS.backspace, KEYS.space].indexOf(keyCode) === -1)
+    ) return null;
+
     e.preventDefault();
     const selection = this.selection;
 
@@ -100,6 +103,7 @@ export default class MaskedInput extends Core {
     const pastedData = getClipboardData(e);
     const selection = this.selection;
 
+    if (selection.start !== selection.end) this.remove(selection.start, selection.end);
     this.cursor = this.add(pastedData, selection.start);
   }
   onCut(e) {
