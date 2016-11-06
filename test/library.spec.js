@@ -83,82 +83,6 @@ describe('static methods', function () {
     });
   });
 });
-// describe('when I call constructor', () => {
-//   it('should save element and mask to local scope', () => {
-//     var input = document.createElement('input');
-//     var mask = Nebo15Mask.parseMask('111');
-//     var inst = new Nebo15Mask(input, '111');
-//
-//     expect(inst.element).to.equal(input);
-//     expect(inst.mask).to.deep.equal(mask);
-//   });
-// });
-// describe('instance', () => {
-//   let instance;
-//
-//   beforeEach(() => {
-//     instance = new Nebo15Mask(document.createElement('input'), '11-11');
-//   });
-//   it('should react on keydown event and format input by mask', () => {
-//     fireKeydown(instance.element, '1');
-//     expect(instance.element.value).to.equal('1');
-//     fireKeydown(instance.element, '2');
-//     expect(instance.element.value).to.equal('12');
-//     fireKeydown(instance.element, '3');
-//     expect(instance.element.value).to.equal('12-3');
-//     fireKeydown(instance.element, '4');
-//     expect(instance.element.value).to.equal('12-34');
-//   });
-//   it('should not overflow mask on keydown', () => {
-//     fireChange(instance.element, '1234');
-//     expect(instance.element.value).to.equal('12-34');
-//     fireKeydown(instance.element, '5');
-//     expect(instance.element.value).to.equal('12-34');
-//   });
-//   it('should react on change event and format input by mask', () => {
-//     fireChange(instance.element, '1234');
-//     expect(instance.element.value).to.equal('12-34');
-//   });
-//   it('should remove characters on backspace keydown', () => {
-//     fireChange(instance.element, '1234');
-//     expect(instance.element.value).to.equal('12-34');
-//     fireKeydown(instance.element, KEYS.backspace);
-//     expect(instance.element.value).to.equal('12-3');
-//     fireKeydown(instance.element, KEYS.backspace);
-//     expect(instance.element.value).to.equal('12');
-//     fireKeydown(instance.element, KEYS.backspace);
-//     expect(instance.element.value).to.equal('1');
-//     fireKeydown(instance.element, KEYS.backspace);
-//     expect(instance.element.value).to.equal('');
-//   });
-//   describe('test chars', () => {
-//     it('should ignore keydown of invalid char', () => {
-//       fireChange(instance.element, '1');
-//       expect(instance.element.value).to.equal('1');
-//       fireKeydown(instance.element, 'b');
-//       expect(instance.element.value).to.equal('1');
-//     });
-//     it('should ignore invalid char on change', () => {
-//       fireChange(instance.element, '12w2');
-//       expect(instance.element.value).to.equal('12-');
-//     });
-//   });
-//   // describe('selection', () => {
-//   //   let instance;
-//   //
-//   //   beforeEach(() => {
-//   //     instance = new Nebo15Mask(document.createElement('input'), '111-11-111');
-//   //     fireChange(instance.element, '12345678');
-//   //     instance.selection = { start: 2, end: 6 }; // -45-
-//   //   });
-//   //   describe('delete', () => {
-//   //     it('should delete selection on backspace keydown', () => {
-//   //       fireKeydown(instance.element, KEYS.backspace);
-//   //       expect(instance.element.value).to.equal('012-78-9');
-//   //     });
-//   //   });
-//   // });
-// });
 
 describe('core', () => {
   let instance;
@@ -218,9 +142,8 @@ describe('core', () => {
       instance = new Nebo15Mask(document.createElement('input'), 'ww 1111');
       console.log(instance.mask);
       instance.add('a');
+      instance.add('1');
       expect(instance.value).to.equal('a');
-      // instance.add('w');
-      // expect(instance.value).to.equal('1');
     });
     it('should not overflow mask', () => {
       instance.value = '12-34';
