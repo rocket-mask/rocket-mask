@@ -162,6 +162,14 @@ Mask.format = function (value, maskArr = []) {
   maskArr[0] instanceof MaskPlaceStatic ? (maskArr[0].pattern + Mask.format(value, maskArr.slice(1))) :
   maskArr[0].test(value[0]) ? ((value[0] || '') + Mask.format(value.slice(1), maskArr.slice(1))) : '';
 };
+Mask.formatWithPlaceholder = function (value, maskArr = [], placeholder = '_') {
+  const formattedValue = Mask.format(value, maskArr);
+
+  return maskArr.split(formattedValue.length).reduce(
+    (cur, i) => value + (i instanceof MaskPlaceStatic) ? i.pattern : placeholder,
+    formattedValue
+  );
+};
 Mask.parse = function (value, maskArr = []) {
   value = value || '';
   return typeof maskArr[0] === 'undefined' ? '' :

@@ -66,6 +66,18 @@ describe('static methods', function () {
       expect(Nebo15Mask.format('', mask)).to.equal('');
     });
   });
+  describe('when I need to format string by mask with placeholders', function () {
+    it('should use _ as default placeholder', () => {
+      expect(Nebo15Mask.formatWithPlaceholder('12', Nebo15Mask.parseMask('1111'))).to.equal('12__');
+    });
+    it('should accept custom placeholder', () => {
+      expect(Nebo15Mask.format('12', Nebo15Mask.parseMask('11 11 11'), '*')).to.equal('12 ** **');
+    });
+    it('should display static symbols', () => {
+      expect(Nebo15Mask.format('12', Nebo15Mask.parseMask('+-(11)-11-11'), '*')).to.equal('+-(12)-**-**');
+    });
+
+  });
   describe('when I need to parse string by mask', function () {
     it('should cut off over length value', () => {
       expect(Nebo15Mask.parse('123456', Nebo15Mask.parseMask('11'))).to.equal('12');
