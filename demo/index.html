@@ -19,8 +19,8 @@
     <script>
       var formEl = document.getElementById('demoForm');
       var inputEls = formEl.querySelectorAll('input[mask]');
-      [].forEach.call(inputEls, function (el) {
-        new Nebo15Mask.default(el, el.getAttribute('mask'));
+      window.masks = [].map.call(inputEls, function (el) {
+        return new Nebo15Mask.default(el, el.getAttribute('mask'));
       });
     </script>
   </body>
