@@ -103,7 +103,7 @@ export default class Mask {
       this.element.value += this.mask[i].pattern;
       i++;
     }
-    if (this.mask[i]) {
+    if (this.mask[i] && this.mask[i].test(char)) {
       this.element.value += char;
     }
   }

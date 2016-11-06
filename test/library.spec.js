@@ -82,6 +82,7 @@ describe('static methods', function () {
   });
   describe('when I input input element', () => {
     let instance;
+
     beforeEach(() => {
       instance = new Nebo15Mask(document.createElement('input'), '11-11');
     });
@@ -116,6 +117,18 @@ describe('static methods', function () {
       expect(instance.element.value).to.equal('1');
       fireKeydown(instance.element, KEYS.backspace);
       expect(instance.element.value).to.equal('');
+    });
+    describe('test chars', () => {
+      it('should ignore keydown of invalid char', () => {
+        fireChange(instance.element, '1');
+        expect(instance.element.value).to.equal('1');
+        fireKeydown(instance.element, 'b');
+        expect(instance.element.value).to.equal('1');
+      });
+      it('should ignore invalid char on change', () => {
+        fireChange(instance.element, '12w2');
+        expect(instance.element.value).to.equal('12-');
+      });
     });
   });
 });
