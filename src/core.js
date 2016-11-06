@@ -1,11 +1,12 @@
 import { MaskPlaceStatic, MaskPlace } from './places';
 
 export default class Mask {
-  constructor(mask) {
+  constructor(mask, placeholder) {
     this._name = 'nebo15-mask';
     this._mask = Mask.parseMask(mask);
     this._states = [];
     this._stateIdx = -1;
+    this._placeholder = placeholder;
   }
 
   // public interfaces
@@ -26,7 +27,9 @@ export default class Mask {
     return Mask.parse(this.value, this.mask);
   }
   set model(modelValue) {
-    this.viewValue = Mask.format(modelValue, this.mask);
+    this.viewValue = this._placeholder ?
+    Mask.formatWithPlaceholder(modelValue, this.mask, this._placeholder) :
+    Mask.format(modelValue, this.mask);
   }
 
   _getModelPosition(maskPosition) {
@@ -88,7 +91,10 @@ export default class Mask {
     this.model = newModel;
     this.saveState(newModel);
 
-    return this._getCursorPosition(modelPosition + (insertChunk.length - 1));
+    let newPosition = this._getCursorPosition(modelPosition + (insertChunk.length - 1));
+    let maxPosition = this._getCursorPosition(newModel.length - 1);
+
+    return newPosition > maxPosition ? maxPosition : newPosition;
   }
   /**
    * Remove from mask by start and end selection positions
@@ -123,18 +129,24 @@ export default class Mask {
 
     return this.remove(position, this._getCursorPosition(prevCharacter));
   }
-  undo() {
-    if (this._stateIdx === -1) return;
+  undo(position) {
+    if (this._stateIdx === -1) return position;
 
     this._stateIdx -= 1;
     this.model = this._states[this._stateIdx];
+    let maxPosition = this._getCursorPosition(this.model.length - 1);
+
+    return Math.min(position, maxPosition);
   }
-  redo() {
+  redo(position) {
     const nextState = this._states[this._stateIdx + 1];
 
-    if (!nextState) return;
+    if (!nextState) return position;
     this._stateIdx++;
     this.model = nextState;
+    let maxPosition = this._getCursorPosition(this.model.length - 1);
+
+    return Math.min(position, maxPosition);
   }
   saveState(state) {
     this._states = this._states.slice(0, this._stateIdx + 1);
@@ -165,8 +177,8 @@ Mask.format = function (value, maskArr = []) {
 Mask.formatWithPlaceholder = function (value, maskArr = [], placeholder = '_') {
   const formattedValue = Mask.format(value, maskArr);
 
-  return maskArr.split(formattedValue.length).reduce(
-    (cur, i) => value + (i instanceof MaskPlaceStatic) ? i.pattern : placeholder,
+  return maskArr.slice(formattedValue.length).reduce(
+    (cur, i) => cur + ((i instanceof MaskPlaceStatic) ? i.pattern : String(placeholder)[0]),
     formattedValue
   );
 };

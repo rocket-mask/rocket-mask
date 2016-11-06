@@ -37,9 +37,18 @@ const getClipboardData = e => (e.clipboardData || window.clipboardData).getData(
 
 export default class MaskedInput extends Core {
 
-  constructor(element, mask) {
-    super(mask);
+  constructor(element, mask, options = {}) {
 
+    options = Object.assign({
+      placeholder: null,
+      showOnFocus: false,
+      hideOnBlur: false,
+      showAlways: false
+    }, options);
+
+    super(mask, options.placeholder);
+
+    this.options = options;
     this._element = element;
     this.onChange = this.onChange.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
@@ -50,6 +59,15 @@ export default class MaskedInput extends Core {
     this._element.addEventListener('keydown', this.onKeydown);
     this._element.addEventListener('paste', this.onPaste);
     this._element.addEventListener('cut', this.onCut);
+
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    this._element.addEventListener('focus', this.onFocus);
+    this._element.addEventListener('blur', this.onBlur);
+
+    if (options.showAlways) {
+      this.model = this.model || '';
+    }
   }
   get viewValue() {
     return this._element.value;
@@ -69,11 +87,13 @@ export default class MaskedInput extends Core {
 
     if (isUndo(e)) {
       e.preventDefault();
-      return this.undo();
+      this.cursor = this.undo(this.cursor);
+      return null;
     }
     if (isRedo(e)) {
       e.preventDefault();
-      return this.redo();
+      this.cursor = this.redo(this.cursor);
+      return null;
     }
 
     if (keyCode === 0) {
@@ -121,6 +141,20 @@ export default class MaskedInput extends Core {
     });
   }
 
+  onFocus(e) {
+    if (this.options.showOnFocus) {
+      e.preventDefault(); // input will be focused while setting cursor
+      this.model = this.model || '';
+      setTimeout(() => {
+        this.cursor = this._getCursorPosition(this.model.length - 1);
+      }, 0);
+    }
+  }
+  onBlur(e) {
+    if (!this.options.showAlways && this.options.hideOnBlur && this.model.length === 0) {
+      this.viewValue = '';
+    }
+  }
   get cursor() {
     return this.selection.start;
   }

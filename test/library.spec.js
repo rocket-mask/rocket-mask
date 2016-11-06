@@ -71,10 +71,11 @@ describe('static methods', function () {
       expect(Nebo15Mask.formatWithPlaceholder('12', Nebo15Mask.parseMask('1111'))).to.equal('12__');
     });
     it('should accept custom placeholder', () => {
-      expect(Nebo15Mask.format('12', Nebo15Mask.parseMask('11 11 11'), '*')).to.equal('12 ** **');
+      expect(Nebo15Mask.formatWithPlaceholder('12', Nebo15Mask.parseMask('11 11 11'), '*')).to.equal('12 ** **');
     });
     it('should display static symbols', () => {
-      expect(Nebo15Mask.format('12', Nebo15Mask.parseMask('+-(11)-11-11'), '*')).to.equal('+-(12)-**-**');
+      expect(Nebo15Mask.formatWithPlaceholder('12', Nebo15Mask.parseMask('+-(11)-11-11'), '*'))
+      .to.equal('+-(12)-**-**');
     });
 
   });

@@ -11,6 +11,6 @@ TODO:
 - [x] Insert when part of mask is selected
 - [x] Past/Cut
 - [x] Undo/Redo
-- [ ] Try to format copied formatted mask.
+- [x] Try to format copied formatted mask.
+- [x] Show data pattern on input background
 - [ ] Escaping mask characters (eg. \1) to be able to use mask chars as static symbols
-- [ ] Show data pattern on input background
