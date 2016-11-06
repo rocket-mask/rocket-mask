@@ -7,14 +7,24 @@
   </head>
   <body>
     <form id="demoForm">
-      <label>
-        <b>Credit card</b>
-        <input mask="1111 1111 1111 1111" name="creditCard"/>
-      </label>
-      <label>
-        <b>Phone number</b>
-        <input mask="+38 (011) 111-11-11" name="phoneNumber"/>
-      </label>
+      <div>
+        <label>
+          <b>Credit card</b>
+          <input mask="1111 1111 1111 1111" name="creditCard"/>
+        </label>
+      </div>
+      <div>
+        <label>
+          <b>Phone number</b>
+          <input mask="+38 (011) 111-11-11" name="phoneNumber"/>
+        </label>
+      </div>
+      <div>
+        <label>
+          <b>Passport</b>
+          <input mask="ww 111111" name="phoneNumber"/>
+        </label>
+      </div>
     </form>
     <script>
       var formEl = document.getElementById('demoForm');

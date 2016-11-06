@@ -12,7 +12,7 @@ export class MaskPlace {
 }
 
 class MaskPlaceRegexp extends MaskPlace {
-  test(char) {
+  test(char = '') {
     return this.pattern.test(char);
   }
 }
@@ -60,24 +60,18 @@ const KEYS = {
   'delete':	46
 };
 
-export default class Mask {
-  constructor(element, mask) {
+class Mask {
+  constructor(mask) {
     this._name = 'nebo15-mask';
-    this._element = element;
     this._mask = Mask.parseMask(mask);
-    this.onInputChange = this.onInputChange.bind(this);
-    this.onKeydown = this.onKeydown.bind(this);
-
-    this._element.addEventListener('change', this.onInputChange);
-    this._element.addEventListener('keydown', this.onKeydown);
   }
 
   // public interfaces
   get viewValue() {
-    return this.element.value;
+    throw new Error('get view value must me overrited');
   }
   set viewValue(value) {
-    this.element.value = value;
+    throw new Error('get view value must me overrited');
   }
 
   get value() {
@@ -95,6 +89,16 @@ export default class Mask {
 
   _getModelPosition(maskPosition) {
     return this.mask.slice(0, maskPosition).reduce((sum, cur) => sum += !(cur instanceof MaskPlaceStatic), 0);
+  }
+  _getMaskPosition(modelPosition) {
+    return this.mask.reduce(
+      (sum, cur) => {
+        if (modelPosition === -1) return sum;
+        if (cur instanceof MaskPlaceStatic) return sum + 1;
+        modelPosition--;
+        return sum + 1;
+      }, -1
+    );
   }
   _getCursorPosition(leftPlaces) {
     let finish = false;
@@ -125,15 +129,15 @@ export default class Mask {
    * @param {number} position - cursor position
    * @returns {number} cursor position
    */
-  add(char, position = this.value.length) {
+  add(char = '', position = this.value.length) {
     const modelPosition = this._getModelPosition(position);
     const model = this.model;
     const leftPlaces = this.__modelSize - model.length;
-    const insertChunk = char.slice(0, leftPlaces);
+    const insertChunk = char.slice(0, leftPlaces) || '';
     const newModel = model.slice(0, modelPosition) + insertChunk + model.slice(modelPosition);
 
     this.model = newModel;
-    return this._getCursorPosition(modelPosition + (insertChunk.length ? (insertChunk.length - 1) : 0));
+    return this._getCursorPosition(modelPosition + (insertChunk.length - 1));
   }
   /**
    * Remove from mask by start and end selection positions
@@ -145,53 +149,100 @@ export default class Mask {
   remove(start, end) {
     const model = this.model;
 
-    start = typeof start === 'number' ? start : this.mask.length;
-    end = typeof end === 'number' ? end : (start + 1);
-
-    if (end < start) throw new Error('remove: end must be >= start');
+    if (end < start) return start;
 
     const startModel = this._getModelPosition(start);
     const endModel = this._getModelPosition(end);
 
     this.model = model.slice(0, startModel) + model.slice(endModel);
-    return this._getCursorPosition(startModel - 1);
+    return start;
+  }
+  backspace(position) {
+    if (position === 0) return position;
+    const prevCharacter = this._getModelPosition(position);
+
+    return this.remove(this._getCursorPosition(prevCharacter - 2), position);
+  }
+  forwardDelete(position) {
+    if (position === this.mask.length) return position;
+    const prevCharacter = this._getModelPosition(position);
+
+    return this.remove(position, this._getCursorPosition(prevCharacter));
+  }
+
+  get name() {
+    return this._name;
+  }
+  get mask() {
+    return this._mask;
+  }
+}
+Mask.maskedOptions = {
+  '1': /\d/,
+  'w': /[a-zA-Z]/
+};
+Mask.parseMask = function (mask = '') {
+  return String(mask).split('').map((i, idx) => MaskPlace.create(Mask.maskedOptions[i] || i, idx));
+};
+Mask.format = function (value, maskArr = []) {
+  value = value || '';
+  return typeof maskArr[0] === 'undefined' ? '' :
+  maskArr[0] instanceof MaskPlaceStatic ? (maskArr[0].pattern + Mask.format(value, maskArr.slice(1))) :
+  maskArr[0].test(value[0]) ? ((value[0] || '') + Mask.format(value.slice(1), maskArr.slice(1))) : '';
+};
+Mask.parse = function (value, maskArr = []) {
+  value = value || '';
+  return typeof maskArr[0] === 'undefined' ? '' :
+  maskArr[0] instanceof MaskPlaceStatic ?
+  maskArr[0].test(value[0]) ?
+  (Mask.parse(value.slice(1), maskArr.slice(1))) :
+  '' :
+  maskArr[0].test(value[0]) ? (value[0] + Mask.parse(value.slice(1), maskArr.slice(1))) : '';
+};
+
+export default class MaskedInput extends Mask {
+
+  constructor(element, mask) {
+    super(mask);
+
+    this._element = element;
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onKeydown = this.onKeydown.bind(this);
+
+    this._element.addEventListener('change', this.onInputChange);
+    this._element.addEventListener('keydown', this.onKeydown);
+  }
+  get viewValue() {
+    return this._element.value;
+  }
+  set viewValue(value) {
+    this._element.value = value;
   }
 
   onInputChange(e) {
     const { value } = e.target;
 
-    this.element.value = Mask.format(value, this.mask);
+    this.model = value;
   }
   onKeydown(e) {
     const keyCode = e.keyCode;
 
     if (e.ctrlKey || e.altKey || e.metaKey || (keyCode < 46 && [KEYS.backspace].indexOf(keyCode) === -1)) return;
     e.preventDefault();
-    if (keyCode === KEYS.backspace) this.removeChar();
-    else this.addChar(String.fromCharCode(keyCode), String(this.element.value).length);
-  }
-  removeChar() {
-    const position = String(this.element.value).length;
-    let i = position - 1;
-    let deleted = false;
+    const selection = this.selection;
 
-    while (!deleted && this.mask[i] || this.mask[i] instanceof MaskPlaceStatic || i >= this.mask.length) {
-      if (!(this.mask[i] instanceof MaskPlaceStatic)) deleted = true;
-      this.element.value = this.element.value.slice(0, i) + this.element.value.slice(i + 1);
-      i--;
+    if (keyCode === KEYS.backspace) {
+      this.cursor = selection.start === selection.end ?
+        this.backspace(selection.start) :
+        this.remove(selection.start, selection.end);
+    } else if (keyCode === KEYS.delete) {
+      this.cursor = selection.start === selection.end ?
+        this.forwardDelete(selection.start) :
+        this.remove(selection.start, selection.end);
+    } else {
+      if (selection.start !== selection.end) this.remove(selection.start, selection.end);
+      this.cursor = this.add(String.fromCharCode(keyCode), selection.start);
     }
-  }
-  addChar(char, position) {
-    let i = position;
-
-    while (this.mask[i] && this.mask[i] instanceof MaskPlaceStatic) {
-      this.element.value += this.mask[i].pattern;
-      i++;
-    }
-    if (this.mask[i] && this.mask[i].test(char)) {
-      this.element.value += char;
-    }
-    this.cursor = this.cursor + 1;
   }
 
   get cursor() {
@@ -203,13 +254,13 @@ export default class Mask {
   get selection() {
     var start, end, rangeEl, clone;
 
-    if (this.element.selectionStart !== undefined) {
-      start = this.element.selectionStart;
-      end = this.element.selectionEnd;
+    if (this._element.selectionStart !== undefined) {
+      start = this._element.selectionStart;
+      end = this._element.selectionEnd;
     } else {
       try {
-        this.element.focus();
-        rangeEl = this.element.createTextRange();
+        this._element.focus();
+        rangeEl = this._element.createTextRange();
         clone = rangeEl.duplicate();
 
         rangeEl.moveToBookmark(document.selection.createRange().getBookmark());
@@ -226,12 +277,12 @@ export default class Mask {
     var rangeEl;
 
     try {
-      if (this.element.selectionStart !== undefined) {
-        this.element.focus();
-        this.element.setSelectionRange(selection.start, selection.end);
+      if (this._element.selectionStart !== undefined) {
+        this._element.focus();
+        this._element.setSelectionRange(selection.start, selection.end);
       } else {
-        this.element.focus();
-        rangeEl = this.element.createTextRange();
+        this._element.focus();
+        rangeEl = this._element.createTextRange();
         rangeEl.collapse(true);
         rangeEl.moveStart('character', selection.start);
         rangeEl.moveEnd('character', selection.end - selection.start);
@@ -241,33 +292,4 @@ export default class Mask {
       console.log('catched on set selection');
     }
   }
-  get element() {
-    return this._element;
-  }
-  get name() {
-    return this._name;
-  }
-  get mask() {
-    return this._mask;
-  }
 }
-Mask.maskedOptions = {
-  '1': /\d/,
-  'w': /[a-zA-Z]/
-};
-Mask.parseMask = function (mask = '') {
-  return String(mask).split('').map((i, idx) => MaskPlace.create(Mask.maskedOptions[i] || i, idx));
-};
-Mask.format = function (value, maskArr = []) {
-  return typeof maskArr[0] === 'undefined' ? '' :
-  maskArr[0] instanceof MaskPlaceStatic ? (maskArr[0].pattern + Mask.format(value, maskArr.slice(1))) :
-  maskArr[0].test(value[0]) ? (value[0] + Mask.format(value.slice(1), maskArr.slice(1))) : '';
-};
-Mask.parse = function (value, maskArr = []) {
-  return typeof maskArr[0] === 'undefined' ? '' :
-  maskArr[0] instanceof MaskPlaceStatic ?
-  maskArr[0].test(value[0]) ?
-  (Mask.parse(value.slice(1), maskArr.slice(1))) :
-  '' :
-  maskArr[0].test(value[0]) ? (value[0] + Mask.parse(value.slice(1), maskArr.slice(1))) : '';
-};
