@@ -14,3 +14,4 @@ TODO:
 - [x] Try to format copied formatted mask.
 - [x] Show data pattern on input background
 - [ ] Escaping mask characters (eg. \1) to be able to use mask chars as static symbols
+- [ ] Dynamic mask using function
