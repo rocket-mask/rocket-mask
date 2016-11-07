@@ -1,8 +1,8 @@
 {
-  "name": "webpack-library-starter",
+  "name": "nebo15-mask",
   "version": "0.1.3",
-  "description": "Produce universal library with webpack and es6",
-  "main": "lib/library.js",
+  "description": "Nebo15 Mask library",
+  "main": "lib/nebo15-mask.js",
   "scripts": {
     "build": "webpack --mode=build",
     "dev": "webpack --progress --colors --watch --mode=dev",
