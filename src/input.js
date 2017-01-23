@@ -66,7 +66,7 @@ export default class MaskedInput extends Core {
     this._element.addEventListener('blur', this.onBlur);
 
     if (options.showAlways) {
-      this._model = this._model || '';
+      this.model = this.model || '';
     }
   }
   get viewValue() {
@@ -77,17 +77,17 @@ export default class MaskedInput extends Core {
   }
 
   get model() {
-    return this._modelGetter();
+    return this.modelGetter();
   }
   set model(modelValue) {
-    this._modelSetter(modelValue);
+    this.modelSetter(modelValue);
     this.options.onModelChange && this.options.onModelChange(modelValue);
   }
 
   onChange(e) {
     const { value } = e.target;
 
-    this._model = value;
+    this.model = value;
   }
   onKeydown(e) {
     e = e || window.event;
@@ -152,14 +152,14 @@ export default class MaskedInput extends Core {
   onFocus(e) {
     if (this.options.showOnFocus) {
       e.preventDefault(); // input will be focused while setting cursor
-      this._model = this._model || '';
+      this.model = this.model || '';
       setTimeout(() => {
-        this.cursor = this._getCursorPosition(this._model.length - 1);
+        this.cursor = this._getCursorPosition(this.model.length - 1);
       }, 0);
     }
   }
   onBlur(e) {
-    if (!this.options.showAlways && this.options.hideOnBlur && this._model.length === 0) {
+    if (!this.options.showAlways && this.options.hideOnBlur && this.model.length === 0) {
       this.viewValue = '';
     }
   }
