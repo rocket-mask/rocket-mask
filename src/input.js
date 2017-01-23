@@ -77,10 +77,10 @@ export default class MaskedInput extends Core {
   }
 
   get model() {
-    return this.modelGetter();
+    return this._modelGetter();
   }
   set model(modelValue) {
-    this.modelSetter(modelValue);
+    this._modelSetter(modelValue);
     this.options.onModelChange && this.options.onModelChange(modelValue);
   }
 
