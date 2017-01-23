@@ -4,25 +4,25 @@ const KEYS = {
   Z: 90,
   Y: 89,
   backspace: 8,
-  tab:	9,
+  tab: 9,
   enter: 13,
   shift: 16,
-  ctrl:	17,
+  ctrl: 17,
   alt: 18,
-  pauseBreak:	19,
-  capsLock:	20,
-  escape:	27,
+  pauseBreak: 19,
+  capsLock: 20,
+  escape: 27,
   space: 32,
-  pageUp:	33,
-  pageDown:	34,
-  end:	35,
-  home:	36,
-  leftArrow:	37,
-  upArrow:	38,
-  rightArrow:	39,
-  downArrow:	40,
-  insert:	45,
-  delete:	46
+  pageUp: 33,
+  pageDown: 34,
+  end: 35,
+  home: 36,
+  leftArrow: 37,
+  upArrow: 38,
+  rightArrow: 39,
+  downArrow: 40,
+  insert: 45,
+  delete: 46
 };
 
 function isUndo(e) {
@@ -66,7 +66,7 @@ export default class MaskedInput extends Core {
     this._element.addEventListener('blur', this.onBlur);
 
     if (options.showAlways) {
-      this.model = this.model || '';
+      this._model = this._model || '';
     }
   }
   get viewValue() {
@@ -76,10 +76,18 @@ export default class MaskedInput extends Core {
     this._element.value = value;
   }
 
+  get model() {
+    return this._modelGetter();
+  }
+  set model(modelValue) {
+    this._modelSetter(modelValue);
+    this.options.onModelChange && this.options.onModelChange(modelValue);
+  }
+
   onChange(e) {
     const { value } = e.target;
 
-    this.model = value;
+    this._model = value;
   }
   onKeydown(e) {
     e = e || window.event;
@@ -144,14 +152,14 @@ export default class MaskedInput extends Core {
   onFocus(e) {
     if (this.options.showOnFocus) {
       e.preventDefault(); // input will be focused while setting cursor
-      this.model = this.model || '';
+      this._model = this._model || '';
       setTimeout(() => {
-        this.cursor = this._getCursorPosition(this.model.length - 1);
+        this.cursor = this._getCursorPosition(this._model.length - 1);
       }, 0);
     }
   }
   onBlur(e) {
-    if (!this.options.showAlways && this.options.hideOnBlur && this.model.length === 0) {
+    if (!this.options.showAlways && this.options.hideOnBlur && this._model.length === 0) {
       this.viewValue = '';
     }
   }

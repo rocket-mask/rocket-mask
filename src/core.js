@@ -24,9 +24,17 @@ export default class Mask {
     this.model = Mask.parse(value, this.mask);
   }
   get model() {
-    return Mask.parse(this.value, this.mask);
+    return this._modelGetter();
   }
   set model(modelValue) {
+    this._modelSetter(modelValue);
+  }
+
+  _modelGetter() {
+    return Mask.parse(this.value, this.mask);
+
+  }
+  _modelSetter(modelValue) {
     this.viewValue = this._placeholder ?
     Mask.formatWithPlaceholder(modelValue, this.mask, this._placeholder) :
     Mask.format(modelValue, this.mask);

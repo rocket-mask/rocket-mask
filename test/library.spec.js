@@ -104,6 +104,16 @@ describe('core', () => {
     instance = new Nebo15Mask(document.createElement('input'), '11-11');
   });
 
+  describe('model change callback', () => {
+    it('should change', (done) => {
+      const scopedInstance = new Nebo15Mask(document.createElement('input'), '11-11', {
+        onModelChange: () => done()
+      });
+
+      scopedInstance.add('1');
+    });
+  });
+
   describe('set/get model', () => {
     it('should format by mask on set model', () => {
       instance.model = '1234';
