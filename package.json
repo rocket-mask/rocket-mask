@@ -1,6 +1,6 @@
 {
   "name": "nebo15-mask",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Nebo15 Mask library",
   "main": "lib/nebo15-mask.js",
   "scripts": {
@@ -30,7 +30,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/krasimir/webpack-library-starter.git"
+    "url": "https://github.com/nebo15/nebo15-mask.git"
   },
   "keywords": [
     "webpack",
@@ -41,10 +41,10 @@
     "umd",
     "commonjs"
   ],
-  "author": "Krasimir Tsonev",
+  "author": "Nebo15",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/krasimir/webpack-library-starter/issues"
+    "url": "https://github.com/nebo15/nebo15-mask/issues"
   },
-  "homepage": "https://github.com/krasimir/webpack-library-starter"
+  "homepage": "https://github.com/nebo15/nebo15-mask"
 }
