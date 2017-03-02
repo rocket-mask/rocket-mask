@@ -129,6 +129,7 @@ export default class Mask {
     if (position === 0) return position;
     const prevCharacter = this._getModelPosition(position);
 
+    if (prevCharacter === 0) return position;
     return this.remove(this._getCursorPosition(prevCharacter - 2), position);
   }
   forwardDelete(position) {
