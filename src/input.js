@@ -87,7 +87,7 @@ export default class MaskedInput extends Core {
   onChange(e) {
     const { value } = e.target;
 
-    this.model = value;
+    this.viewValue = value;
   }
   onKeydown(e) {
     e = e || window.event;
