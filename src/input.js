@@ -1,3 +1,4 @@
+import keycode from 'keycode';
 import Core from './core';
 
 const KEYS = {
@@ -125,7 +126,7 @@ export default class MaskedInput extends Core {
         this.remove(selection.start, selection.end);
     } else {
       if (selection.start !== selection.end) this.remove(selection.start, selection.end);
-      this.cursor = this.add(String.fromCharCode(keyCode), selection.start);
+      this.cursor = this.add(keycode(e), selection.start);
     }
   }
   onPaste(e) {

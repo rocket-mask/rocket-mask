@@ -1,6 +1,6 @@
 {
   "name": "nebo15-mask",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Nebo15 Mask library",
   "main": "lib/nebo15-mask.js",
   "scripts": {
@@ -46,5 +46,8 @@
   "bugs": {
     "url": "https://github.com/nebo15/nebo15-mask/issues"
   },
-  "homepage": "https://github.com/nebo15/nebo15-mask"
+  "homepage": "https://github.com/nebo15/nebo15-mask",
+  "dependencies": {
+    "keycode": "^2.1.8"
+  }
 }
