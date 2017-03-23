@@ -4,9 +4,10 @@
   "description": "Nebo15 Mask library",
   "main": "lib/nebo15-mask.js",
   "scripts": {
-    "build": "webpack --mode=build",
+    "build": "webpack && webpack --mode=build",
     "dev": "webpack --progress --colors --watch --mode=dev",
-    "test": "mocha --compilers js:babel-core/register --require ./test/helpers.js --colors -w ./test/*.spec.js",
+    "test": "mocha --compilers js:babel-core/register --require ./test/helpers.js --colors ./test/*.spec.js",
+    "test:watch": "npm test -- -w",
     "prepublish": "rimraf lib && npm run build"
   },
   "devDependencies": {

@@ -17,6 +17,7 @@ env:
 before_script:
 - chmod -R +x bin
 - ./bin/version-increment.sh || { exit 1; }
+- npm run build
 test:
 - npm test
 after_success:
