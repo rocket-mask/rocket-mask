@@ -1,5 +1,7 @@
 # Nebo15 Mask
 
+[![Build Status](https://travis-ci.org/Nebo15/nebo15-mask.svg?branch=master)](https://travis-ci.org/Nebo15/nebo15-mask)
+
 TODO:
 
 - [x] Input
