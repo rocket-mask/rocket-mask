@@ -89,7 +89,6 @@ export default class MaskedInput extends Core {
   onChange(e) {
     const { value } = e.target;
 
-    console.log('autocomplete', this.autocomplete(value));
     this.value = this.autocomplete(value);
   }
   onKeydown(e) {
