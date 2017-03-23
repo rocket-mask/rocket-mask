@@ -1,7 +1,7 @@
 language: node_js
 sudo: required
 node_js:
-  - 6.9.1
+- 6.9.1
 cache:
   directories:
   - ~/.nvm
@@ -13,7 +13,6 @@ env:
   - RELEASE_BRANCH="master"
   - MAIN_BRANCHES="master develop"
   - secure: fBzAjW2lz1DYIOKDOjHYzEG5HsK2dugVWPjqLXXNPXKtjQDX64pqz02130HkB/nK6HyMd9x36kOqSvccfbREYGlpMl/JJ5PsyRjAUOmZE3g5IXclZzta9tMyfeL1t6aCBtCoxAtTjPv4d0/2rVp8PngsEBXwaA70+dcKqM7JMqT+AfqWoqjSbT5jPu/eq+661eCbed9NrlyeJ51PqHfk2nUFHNwHFDGI8l5xk0sYyO7wgGoJHaFySCL6oMakwKFJcBtu5r6Da2pEZI2sHtTS2rVEVRq3a2U0KZ9WkSVXBFkBdO8VzGxATQGfKj7JYo5PIALGtpO/2NSTTrzKnP2jnYgzTYSLD3/EoD/VTNQ/wGjm7cjDMQs80eySh/9i2xyIS2/w/+SDXYp53Te/DqIqMuToRSdCfexD7YHiJvaCpi5d1mFHoRbn1yFfpQ5lvuywFkF2hXy6OzWzDOo6Cg3b4yaLKgVoYAJEjfPKseSB9f14WlChW66mghFQjdlGqkNydYsWeSAhnfKX0MMIsuKUotrwDON1UjH/utAgiDjplOLn+nBifpQIUTVe3ct4NfRaNrDrICsdv6zWTk14wZAU1OQ9SJqlSX6buuj/ItdgjTX2eqxZQosoPS0zw7pseHWDywCm827pkjTb1izXTy5KgREpJ1Y8IR9UZOCZc2ZJlf4=
-  - secure: mD/QWK0n/Ezwqv01mVZGzDIObq28XNGAvQqemOk63+7qMm9zciJ9VsPwuWWYbqHlGsKZwDFbRejkGj2FaUx/0iVID5PtlNgayKg4MEv2ieFpgD2BVa/+BvE7dnLiP5HBC8Ed4U2shl3idKgZa90V80yAG0fjqHKEDrjLYl+j6m5PWaZEpBEePVCD4p9G+rAEnEoIXs6L4Z3wUSKBZEb0LidEGpGj4RdYCE4e+XLQtwZlptMkqoANV55hvizTSR2zq1Hlp0XehXxk8EI8umiehwVRLhZIjNVA9qbYI5afBMkqC3CEjv4ssrYLEQcYoZ4d26PVpUja79yiXIL7xXfJHzrK47Vm9lDLxoACmJXf6i+yVepYmbPnNrZsowpQjU7a2mLCD8Xd0p2CMJ55XbCM43Ox0tC8aq2Mv9dgLY+v/USiOmx2zjOrupBRbXJvcrFKECeLmEqeuWr5DrNSE4H7dYgardxHZsGDUAbyWQsNruSZKoSpyCNBJDcuMQ1lbReMuENLTv9uw23IKDnWoqRzwWA+9r7Dp+MiBXfc1xJIqOmi6Z1CmYoK92BT5maPiKKoVwZjMGEtIE5y7yf7Lrvbe/wetF5ii29wEHTsHqsnu9SF6wBHqAApkXodgiZ01uP0yK78ys3kelJ6uJ30gJGjGNFTotmHb3udwC5kGh5CkgA=
 before_script:
 - chmod -R +x bin
 - ./bin/version-increment.sh || { exit 1; }
@@ -22,3 +21,11 @@ test:
 - npm test
 after_success:
 - ./bin/ci/push.sh
+deploy:
+  provider: npm
+  email: alexeybondarenko@me.com
+  api_key:
+    secure: iuhOs6l33vSL+NCIsUT27i2pvaq/zj4JBbHkWdfT4gDHHRjTn5mXidsEfUCKOSUCh2PmeUxUEHd9KIUxFNd7CnUolmBm8IHo+Uli7M8fY+v1VJjfv1kEI+ePMpLTz5YTJpM5Sr4nIry0E/p1RnKEKJ8VVq6FNR8q96YlDIntWOaOXsrWqfRhPAfC982HrY4je5e4ZxwhkcuXfAYHNlEKlVoPJNNAJ/0w5xX03OLJU6oeo4dX6X4pZdXEWVUnbxp73jpwA2THsNn68d0N/BjtgQUhfvOE652TjRSnbV2kSW7PnlI/hLWDA3tIpibUjo9Xlqp8+kboCuL4d2ueDjoumKTg2pU8DQiwn3yNWKF7fUMnt/OHjc5SHZ2D0h+12AAHmIrYSc12FOI6HRCU8vuSVCsHoERZCROePXjFgmcC2O65kXH0FgOXdMfxMcNKhZGaVUZcrcfZZnSjXhVd8TQ8kfLT63dmjqm5T9lHkCTLs8nALQmF0o59BOsAW+zcKG+dqPM1YPk6JLqx7X7kn1xK0OR0AotXTFA2gBlJbBgpUaeBZCug2w/zmrYrs7bu1xVI3HSJpvFRfMXu2/fSqvTx9L5VBYhARD6YIqa1QqIuJoGLofJ5pmRgtuMejX7+PFz3l0CITM0TEkgYuw9QNHuB86bSARzL2XKoURWcuF4PtPk=
+  on:
+    tags: true
+    repo: Nebo15/nebo15-mask

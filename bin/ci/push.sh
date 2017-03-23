@@ -24,8 +24,4 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     git push upstream HEAD:$TRAVIS_BRANCH > /dev/null 2>&1;
     git push upstream HEAD:$TRAVIS_BRANCH --tags > /dev/null 2>&1;
   fi;
-
-  if [ "$TRAVIS_BRANCH" == "$RELEASE_BRANCH" ]; then
-    npm publish
-  fi;
 fi;
