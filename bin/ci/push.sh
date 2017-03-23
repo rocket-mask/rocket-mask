@@ -26,6 +26,6 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   fi;
 
   if [ "$TRAVIS_BRANCH" == "$RELEASE_BRANCH" ]; then
-    npm publish > /dev/null 2>&1
+    npm publish
   fi;
 fi;
