@@ -1,6 +1,6 @@
 {
   "name": "nebo15-mask",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "Nebo15 Mask library",
   "main": "lib/nebo15-mask.js",
   "scripts": {
