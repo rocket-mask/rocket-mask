@@ -162,6 +162,9 @@ export default class Mask {
     this._states.push(state);
     this._stateIdx = this._states.length - 1;
   }
+  autocomplete(value) {
+    return Mask.autocomplete(value, this.mask);
+  }
 
   get name() {
     return this._name;
@@ -199,4 +202,21 @@ Mask.parse = function (value, maskArr = []) {
   (Mask.parse(value.slice(1), maskArr.slice(1))) :
   '' :
   maskArr[0].test(value[0]) ? (value[0] + Mask.parse(value.slice(1), maskArr.slice(1))) : '';
+};
+
+const isInMask = (char, maskArr) => maskArr.some(i => i.test(char));
+
+Mask.autocomplete = function (value, maskArr = []) {
+  value = value || '';
+  const [char, ...restValue] = value;
+  const [maskChar, ...restMask] = maskArr;
+
+  if (typeof maskChar === 'undefined' || typeof char === 'undefined') return '';
+  if (!isInMask(char, maskArr)) return Mask.autocomplete(restValue, maskArr);
+
+  return maskChar.test(char) ?
+    (char + Mask.autocomplete(restValue, restMask)) :
+    (maskChar instanceof MaskPlaceStatic) ?
+      (maskChar.pattern + Mask.autocomplete(value, restMask)) :
+      '';
 };

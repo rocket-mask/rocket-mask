@@ -57,6 +57,7 @@ export default class MaskedInput extends Core {
     this.onCut = this.onCut.bind(this);
 
     this._element.addEventListener('change', this.onChange);
+    this._element.addEventListener('input', this.onChange);
     this._element.addEventListener('keydown', this.onKeydown);
     this._element.addEventListener('paste', this.onPaste);
     this._element.addEventListener('cut', this.onCut);
@@ -88,7 +89,8 @@ export default class MaskedInput extends Core {
   onChange(e) {
     const { value } = e.target;
 
-    this.viewValue = value;
+    console.log('autocomplete', this.autocomplete(value));
+    this.value = this.autocomplete(value);
   }
   onKeydown(e) {
     e = e || window.event;

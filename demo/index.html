@@ -6,7 +6,7 @@
     <script src="../lib/nebo15-mask.js"></script>
   </head>
   <body>
-    <form id="demoForm">
+    <form id="demoForm" action="/" method="get">
       <div>
         <label>
           <b>Credit card (base)</b>
@@ -40,7 +40,7 @@
       <div>
         <label>
           <b>Phone number</b>
-          <input mask="+38 (011) 111-11-11" name="phoneNumber" with-placeholder="_" show-on-focus="true" hide-on-blur="true" placeholder="+38 (0XX) XXX-XX-XX"/>
+          <input mask="+38 (011) 111 11 11" name="phone" type="tel" autocomplete="tel" placeholder="+38 (0XX) XXX-XX-XX"/>
         </label>
       </div>
       <div>
@@ -49,6 +49,7 @@
           <input mask="ww 111111" name="passport" placeholder="AA 123456"/>
         </label>
       </div>
+      <button type="submit">Submit</button>
     </form>
     <script>
       var formEl = document.getElementById('demoForm');

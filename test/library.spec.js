@@ -1,42 +1,12 @@
 
 import chai from 'chai';
 import spies from 'chai-spies';
-import simulant from 'simulant';
 import { MaskedInput as Nebo15Mask } from '../lib/nebo15-mask.js';
 
 chai.use(spies);
 chai.expect();
 
 const expect = chai.expect;
-const codeFromCharOrCode = charOrCode => typeof charOrCode === 'number' ? charOrCode : charOrCode.charCodeAt(0);
-const fireKeydown = (element, charOrCode) => simulant.fire(element, 'keydown', {
-  keyCode: codeFromCharOrCode(charOrCode)
-});
-const fireChange = (element, value) => {
-  element.value = value;
-  return simulant.fire(element, 'change');
-};
-const KEYS = {
-  backspace: 8,
-  'tab':	9,
-  'enter': 13,
-  'shift': 16,
-  'ctrl':	17,
-  'alt': 18,
-  'pauseBreak':	19,
-  'capsLock':	20,
-  'escape':	27,
-  'pageUp':	33,
-  'pageDown':	34,
-  'end':	35,
-  'home':	36,
-  'leftArrow':	37,
-  'upArrow':	38,
-  'rightArrow':	39,
-  'downArrow':	40,
-  'insert':	45,
-  'delete':	46
-};
 
 describe('static methods', function () {
 
@@ -93,6 +63,31 @@ describe('static methods', function () {
       expect(Nebo15Mask.parse(undefined, Nebo15Mask.parseMask('11'))).to.equal('');
       expect(Nebo15Mask.parse(null, Nebo15Mask.parseMask('11'))).to.equal('');
       expect(Nebo15Mask.parse('', Nebo15Mask.parseMask('11'))).to.equal('');
+    });
+  });
+  describe('autocomplete', () => {
+    beforeEach(() => {
+    });
+    it('should format by mask when set formatted', () => {
+      const mask = Nebo15Mask.parseMask('+38 (011) 111 11 11');
+
+      expect(Nebo15Mask.autocomplete('+38 (093) 268 54-46', mask)).to.equal('+38 (093) 268 54 46');
+      expect(Nebo15Mask.autocomplete('+38 (093) 268 54', mask)).to.equal('+38 (093) 268 54');
+      expect(Nebo15Mask.autocomplete('+38 (093) 26854', mask)).to.equal('+38 (093) 268 54');
+      expect(Nebo15Mask.autocomplete('+38 (093)as26854', mask)).to.equal('+38 (093) 268 54');
+      expect(Nebo15Mask.autocomplete('+38 (093)---as26sadas854', mask)).to.equal('+38 (093) 268 54');
+    });
+    it('should format with mask if set clear model', () => {
+      const mask = Nebo15Mask.parseMask('+38 (011) 111 11 11');
+
+      expect(Nebo15Mask.autocomplete('932685446', mask)).to.equal('+38 (093) 268 54 46');
+    });
+
+    it('should format with mask if set clear model', () => {
+      const mask = Nebo15Mask.parseMask('+38 (011) 111 11 11');
+
+      expect(Nebo15Mask.autocomplete('932685446', mask)).to.equal('+38 (093) 268 54 46');
+      expect(Nebo15Mask.autocomplete('9326854', mask)).to.equal('+38 (093) 268 54');
     });
   });
 });
