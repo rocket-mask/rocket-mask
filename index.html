@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Nebo15 Mask Demo</title>
+    <script src="./nebo15-mask.js"></script>
+  </head>
+  <body>
+    <form id="demoForm" action="/" method="get">
+      <div>
+        <label>
+          <b>Credit card (base)</b>
+          <input mask="1111 1111 1111 1111" name="creditCard" placeholder="XXXX XXXX XXXX XXXX"/>
+        </label>
+      </div>
+      <div>
+        <label>
+          <b>Credit card (with placeholder)</b>
+          <input mask="1111 1111 1111 1111" with-placeholder="_" name="creditCard" placeholder="XXXX XXXX XXXX XXXX"/>
+        </label>
+      </div>
+      <div>
+        <label>
+          <b>Credit card (show on focus)</b>
+          <input mask="1111 1111 1111 1111" with-placeholder="_" show-on-focus="true" name="creditCard" placeholder="XXXX XXXX XXXX XXXX"/>
+        </label>
+      </div>
+      <div>
+        <label>
+          <b>Credit card (hide on blur, if empty)</b>
+          <input mask="1111 1111 1111 1111" with-placeholder="_" hide-on-blur="true" name="creditCard" placeholder="XXXX XXXX XXXX XXXX"/>
+        </label>
+      </div>
+      <div>
+        <label>
+          <b>Credit card (show always)</b>
+          <input mask="1111 1111 1111 1111" with-placeholder="_" show-always="true" name="creditCard" placeholder="XXXX XXXX XXXX XXXX"/>
+        </label>
+      </div>
+      <div>
+        <label>
+          <b>Phone number</b>
+          <input mask="+38 (011) 111 11 11" name="phone" type="tel" autocomplete="tel" placeholder="+38 (0XX) XXX-XX-XX"/>
+        </label>
+      </div>
+      <div>
+        <label>
+          <b>Passport</b>
+          <input mask="ww 111111" name="passport" placeholder="AA 123456"/>
+        </label>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+    <script>
+      var formEl = document.getElementById('demoForm');
+      var inputEls = formEl.querySelectorAll('input[mask]');
+      window.masks = [].map.call(inputEls, function (el) {
+        return new Nebo15Mask.MaskedInput(el, el.getAttribute('mask'), {
+          placeholder: el.getAttribute('with-placeholder'),
+          showOnFocus: el.getAttribute('show-on-focus'),
+          hideOnBlur: el.getAttribute('hide-on-blur'),
+          showAlways: el.getAttribute('show-always'),
+        });
+      });
+    </script>
+  </body>
+</html>
