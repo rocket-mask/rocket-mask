@@ -1,8 +1,8 @@
-# Nebo15 Mask
+# rocket-mask
 
-[![Build Status](https://travis-ci.org/Nebo15/nebo15-mask.svg?branch=master)](https://travis-ci.org/Nebo15/nebo15-mask)
+[![Build Status](https://travis-ci.org/rocket-mask/rocket-mask.svg?branch=master)](https://travis-ci.org/rocket-mask/rocket-mask)
 
-React JS: https://github.com/Nebo15/react-nebo15-mask
+React JS: https://github.com/rocket-mask/react-rocket-mask
 
 TODO:
 

@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Nebo15 Mask Demo</title>
-    <script src="../lib/nebo15-mask.js"></script>
+    <title>Rocket Mask Demo</title>
+    <script src="../lib/rocket-mask.js"></script>
   </head>
   <body>
     <form id="demoForm" action="/" method="get">
@@ -55,7 +55,7 @@
       var formEl = document.getElementById('demoForm');
       var inputEls = formEl.querySelectorAll('input[mask]');
       window.masks = [].map.call(inputEls, function (el) {
-        return new Nebo15Mask.MaskedInput(el, el.getAttribute('mask'), {
+        return new RocketMask.MaskedInput(el, el.getAttribute('mask'), {
           placeholder: el.getAttribute('with-placeholder'),
           showOnFocus: el.getAttribute('show-on-focus'),
           hideOnBlur: el.getAttribute('hide-on-blur'),

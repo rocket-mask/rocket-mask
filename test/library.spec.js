@@ -1,7 +1,7 @@
 
 import chai from 'chai';
 import spies from 'chai-spies';
-import { MaskedInput as Nebo15Mask } from '../lib/nebo15-mask.js';
+import { MaskedInput as RocketMask } from '../lib/rocket-mask.js';
 
 chai.use(spies);
 chai.expect();
@@ -12,82 +12,82 @@ describe('static methods', function () {
 
   describe('when I need to parse mask string', function () {
     it('should return the array of mask patterns', () => {
-      expect(Nebo15Mask.parseMask('11_1')).to.be.have.length(4);
+      expect(RocketMask.parseMask('11_1')).to.be.have.length(4);
     });
   });
   describe('when I need to format string by mask', function () {
     it('should cut off over length value', () => {
-      expect(Nebo15Mask.format('123456', Nebo15Mask.parseMask('11'))).to.equal('12');
+      expect(RocketMask.format('123456', RocketMask.parseMask('11'))).to.equal('12');
     });
     it('should return formatted string, when value have been matched with mask', () => {
-      expect(Nebo15Mask.format('123456', Nebo15Mask.parseMask('11 11 11'))).to.equal('12 34 56');
+      expect(RocketMask.format('123456', RocketMask.parseMask('11 11 11'))).to.equal('12 34 56');
     });
     it('should return formatted string, while value match mask', () => {
-      expect(Nebo15Mask.format('123456', Nebo15Mask.parseMask('11-wwww'))).to.equal('12-');
+      expect(RocketMask.format('123456', RocketMask.parseMask('11-wwww'))).to.equal('12-');
     });
     it('should support static symbols in start and end', () => {
-      expect(Nebo15Mask.format('123456', Nebo15Mask.parseMask('(((-11-)))'))).to.equal('(((-12-)))');
+      expect(RocketMask.format('123456', RocketMask.parseMask('(((-11-)))'))).to.equal('(((-12-)))');
     });
     it('should not throw on undefined/null/empty values', () => {
-      const mask = Nebo15Mask.parseMask('11');
+      const mask = RocketMask.parseMask('11');
 
-      expect(Nebo15Mask.format(undefined, mask)).to.equal('');
-      expect(Nebo15Mask.format(null, mask)).to.equal('');
-      expect(Nebo15Mask.format('', mask)).to.equal('');
+      expect(RocketMask.format(undefined, mask)).to.equal('');
+      expect(RocketMask.format(null, mask)).to.equal('');
+      expect(RocketMask.format('', mask)).to.equal('');
     });
   });
   describe('when I need to format string by mask with placeholders', function () {
     it('should use _ as default placeholder', () => {
-      expect(Nebo15Mask.formatWithPlaceholder('12', Nebo15Mask.parseMask('1111'))).to.equal('12__');
+      expect(RocketMask.formatWithPlaceholder('12', RocketMask.parseMask('1111'))).to.equal('12__');
     });
     it('should accept custom placeholder', () => {
-      expect(Nebo15Mask.formatWithPlaceholder('12', Nebo15Mask.parseMask('11 11 11'), '*')).to.equal('12 ** **');
+      expect(RocketMask.formatWithPlaceholder('12', RocketMask.parseMask('11 11 11'), '*')).to.equal('12 ** **');
     });
     it('should display static symbols', () => {
-      expect(Nebo15Mask.formatWithPlaceholder('12', Nebo15Mask.parseMask('+-(11)-11-11'), '*'))
+      expect(RocketMask.formatWithPlaceholder('12', RocketMask.parseMask('+-(11)-11-11'), '*'))
       .to.equal('+-(12)-**-**');
     });
 
   });
   describe('when I need to parse string by mask', function () {
     it('should cut off over length value', () => {
-      expect(Nebo15Mask.parse('123456', Nebo15Mask.parseMask('11'))).to.equal('12');
+      expect(RocketMask.parse('123456', RocketMask.parseMask('11'))).to.equal('12');
     });
     it('should return parse string, when value have been matched with mask', () => {
-      expect(Nebo15Mask.parse('12 34 56', Nebo15Mask.parseMask('11 11 11'))).to.equal('123456');
+      expect(RocketMask.parse('12 34 56', RocketMask.parseMask('11 11 11'))).to.equal('123456');
     });
     it('should return parsed string, while value match mask', () => {
-      expect(Nebo15Mask.parse('12 34 56', Nebo15Mask.parseMask('11 11-12'))).to.equal('1234');
+      expect(RocketMask.parse('12 34 56', RocketMask.parseMask('11 11-12'))).to.equal('1234');
     });
     it('should not throw on undefined/null/empty values', () => {
-      expect(Nebo15Mask.parse(undefined, Nebo15Mask.parseMask('11'))).to.equal('');
-      expect(Nebo15Mask.parse(null, Nebo15Mask.parseMask('11'))).to.equal('');
-      expect(Nebo15Mask.parse('', Nebo15Mask.parseMask('11'))).to.equal('');
+      expect(RocketMask.parse(undefined, RocketMask.parseMask('11'))).to.equal('');
+      expect(RocketMask.parse(null, RocketMask.parseMask('11'))).to.equal('');
+      expect(RocketMask.parse('', RocketMask.parseMask('11'))).to.equal('');
     });
   });
   describe('autocomplete', () => {
     beforeEach(() => {
     });
     it('should format by mask when set formatted', () => {
-      const mask = Nebo15Mask.parseMask('+38 (011) 111 11 11');
+      const mask = RocketMask.parseMask('+38 (011) 111 11 11');
 
-      expect(Nebo15Mask.autocomplete('+38 (093) 268 54-46', mask)).to.equal('+38 (093) 268 54 46');
-      expect(Nebo15Mask.autocomplete('+38 (093) 268 54', mask)).to.equal('+38 (093) 268 54');
-      expect(Nebo15Mask.autocomplete('+38 (093) 26854', mask)).to.equal('+38 (093) 268 54');
-      expect(Nebo15Mask.autocomplete('+38 (093)as26854', mask)).to.equal('+38 (093) 268 54');
-      expect(Nebo15Mask.autocomplete('+38 (093)---as26sadas854', mask)).to.equal('+38 (093) 268 54');
+      expect(RocketMask.autocomplete('+38 (093) 268 54-46', mask)).to.equal('+38 (093) 268 54 46');
+      expect(RocketMask.autocomplete('+38 (093) 268 54', mask)).to.equal('+38 (093) 268 54');
+      expect(RocketMask.autocomplete('+38 (093) 26854', mask)).to.equal('+38 (093) 268 54');
+      expect(RocketMask.autocomplete('+38 (093)as26854', mask)).to.equal('+38 (093) 268 54');
+      expect(RocketMask.autocomplete('+38 (093)---as26sadas854', mask)).to.equal('+38 (093) 268 54');
     });
     it('should format with mask if set clear model', () => {
-      const mask = Nebo15Mask.parseMask('+38 (011) 111 11 11');
+      const mask = RocketMask.parseMask('+38 (011) 111 11 11');
 
-      expect(Nebo15Mask.autocomplete('932685446', mask)).to.equal('+38 (093) 268 54 46');
+      expect(RocketMask.autocomplete('932685446', mask)).to.equal('+38 (093) 268 54 46');
     });
 
     it('should format with mask if set clear model', () => {
-      const mask = Nebo15Mask.parseMask('+38 (011) 111 11 11');
+      const mask = RocketMask.parseMask('+38 (011) 111 11 11');
 
-      expect(Nebo15Mask.autocomplete('932685446', mask)).to.equal('+38 (093) 268 54 46');
-      expect(Nebo15Mask.autocomplete('9326854', mask)).to.equal('+38 (093) 268 54');
+      expect(RocketMask.autocomplete('932685446', mask)).to.equal('+38 (093) 268 54 46');
+      expect(RocketMask.autocomplete('9326854', mask)).to.equal('+38 (093) 268 54');
     });
   });
 });
@@ -96,12 +96,12 @@ describe('core', () => {
   let instance;
 
   beforeEach(() => {
-    instance = new Nebo15Mask(document.createElement('input'), '11-11');
+    instance = new RocketMask(document.createElement('input'), '11-11');
   });
 
   describe('model change callback', () => {
     it('should change', (done) => {
-      const scopedInstance = new Nebo15Mask(document.createElement('input'), '11-11', {
+      const scopedInstance = new RocketMask(document.createElement('input'), '11-11', {
         onModelChange: () => done()
       });
 
@@ -152,7 +152,7 @@ describe('core', () => {
       expect(instance.value).to.equal('12-34');
     });
     it('should add characters at position', () => {
-      const instance = new Nebo15Mask(document.createElement('input'), '1111 1111 1111 1111');
+      const instance = new RocketMask(document.createElement('input'), '1111 1111 1111 1111');
 
       instance.model = '2222';
       instance.add('3333', 2);
@@ -173,7 +173,7 @@ describe('core', () => {
       expect(instance.value).to.equal('12-4');
     });
     it('should test char by pattern', () => {
-      instance = new Nebo15Mask(document.createElement('input'), 'ww 1111');
+      instance = new RocketMask(document.createElement('input'), 'ww 1111');
       instance.add('a');
       instance.add('1');
       expect(instance.value).to.equal('a');
@@ -295,7 +295,7 @@ describe('private methods', () => {
   let instance;
 
   beforeEach(() => {
-    instance = new Nebo15Mask(document.createElement('input'), '11-11');
+    instance = new RocketMask(document.createElement('input'), '11-11');
   });
   describe('_getModelPosition', () => {
     it('should return model position by mask position', () => {
@@ -309,7 +309,7 @@ describe('private methods', () => {
   });
   describe('_getCursorPosition', () => {
     it('should return cursor position by model position', () => {
-      let instance = new Nebo15Mask(document.createElement('input'), '--11--11');
+      let instance = new RocketMask(document.createElement('input'), '--11--11');
 
       expect(instance._getCursorPosition(0)).to.equal(3);
       expect(instance._getCursorPosition(1)).to.equal(6);
@@ -319,7 +319,7 @@ describe('private methods', () => {
   });
   describe('_getMaskPosition', () => {
     it('should return mask position by model position', () => {
-      let instance = new Nebo15Mask(document.createElement('input'), '--11--11');
+      let instance = new RocketMask(document.createElement('input'), '--11--11');
 
       expect(instance._getMaskPosition(0)).to.equal(2);
       expect(instance._getMaskPosition(1)).to.equal(3);

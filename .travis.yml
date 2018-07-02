@@ -3,7 +3,7 @@ node_js:
 - 6.9.1
 cache:
   directories:
-  - ~/.nvm
+  - "~/.nvm"
   - node_modules
 git:
   depth: 1
@@ -11,21 +11,21 @@ env:
   global:
   - RELEASE_BRANCH="master"
   - MAIN_BRANCHES="master develop"
-  - secure: fBzAjW2lz1DYIOKDOjHYzEG5HsK2dugVWPjqLXXNPXKtjQDX64pqz02130HkB/nK6HyMd9x36kOqSvccfbREYGlpMl/JJ5PsyRjAUOmZE3g5IXclZzta9tMyfeL1t6aCBtCoxAtTjPv4d0/2rVp8PngsEBXwaA70+dcKqM7JMqT+AfqWoqjSbT5jPu/eq+661eCbed9NrlyeJ51PqHfk2nUFHNwHFDGI8l5xk0sYyO7wgGoJHaFySCL6oMakwKFJcBtu5r6Da2pEZI2sHtTS2rVEVRq3a2U0KZ9WkSVXBFkBdO8VzGxATQGfKj7JYo5PIALGtpO/2NSTTrzKnP2jnYgzTYSLD3/EoD/VTNQ/wGjm7cjDMQs80eySh/9i2xyIS2/w/+SDXYp53Te/DqIqMuToRSdCfexD7YHiJvaCpi5d1mFHoRbn1yFfpQ5lvuywFkF2hXy6OzWzDOo6Cg3b4yaLKgVoYAJEjfPKseSB9f14WlChW66mghFQjdlGqkNydYsWeSAhnfKX0MMIsuKUotrwDON1UjH/utAgiDjplOLn+nBifpQIUTVe3ct4NfRaNrDrICsdv6zWTk14wZAU1OQ9SJqlSX6buuj/ItdgjTX2eqxZQosoPS0zw7pseHWDywCm827pkjTb1izXTy5KgREpJ1Y8IR9UZOCZc2ZJlf4=
+  - secure: AuF6WFT4O3Wgm3ggFLYBImo2KpS1//zd7wRI8NbFAk/pE/awM3URf6ttJ5O2X5rbf6TW/OCGgl9Y1AlcJeDiIAvqxodkKYSwVr/qZSdD5zZO+euWcfbcwDDLwOPi902/0Az5JjlSRIbs9nNXmNvcQvYtk/weGsmFn4qZO5hON/GKGDWt8c8S05rpCnDlhwW46begxMvVbXvn++fdsX9la84omKI4/qSJHiULkLd0ww5wj57hORJxZYn495RIrkpwKgyQ6FL9zyQbDDvkJ4OCVwFa+3KjmML6WpAzmyE0Lc/gjEM0jHghGgv/tKJIsXe370ufrfugNX3JHKSNr5bSwbvZouZYf1JhY8U59/AIYOV6D2UWbofCXkeqwX8QZQjgIGzEGtYKKBe1TTwpH1YVX3/zWa4FFnmx2s7VyeIeUxAPYSqQv4Q/UPjSfuiFe7z6kLu7O5mAe38957dDZEvKpU4TVn+tHzjTkWDkK/xRj0VwNend5FMo83558Cj1nwXHvzqeGeMH+7wOpAWf3Y4fewIG5Xw1Zd0a5nxrDVxTPwdf7p2kI2+QpX8g5SxpMIXLgt7CO3CHjwOEkAN9ASy9wSK4JT3K5w0110NBgDwoyWH8IxXktEJ3qkfn1hD8Tr57dkjd0BCuWROYxdz6uMTKOrFsHyTpUEbzjZtW7TARDYY=
 before_script:
 - chmod -R +x bin
-- ./bin/version-increment.sh || { exit 1; }
+- "./bin/version-increment.sh || { exit 1; }"
 - npm run build
 test:
 - npm test
 after_success:
-- ./bin/ci/push.sh
+- "./bin/ci/push.sh"
 deploy:
   provider: npm
   email: alexeybondarenko@me.com
   skip_cleanup: true
   api_key:
-    secure: iuhOs6l33vSL+NCIsUT27i2pvaq/zj4JBbHkWdfT4gDHHRjTn5mXidsEfUCKOSUCh2PmeUxUEHd9KIUxFNd7CnUolmBm8IHo+Uli7M8fY+v1VJjfv1kEI+ePMpLTz5YTJpM5Sr4nIry0E/p1RnKEKJ8VVq6FNR8q96YlDIntWOaOXsrWqfRhPAfC982HrY4je5e4ZxwhkcuXfAYHNlEKlVoPJNNAJ/0w5xX03OLJU6oeo4dX6X4pZdXEWVUnbxp73jpwA2THsNn68d0N/BjtgQUhfvOE652TjRSnbV2kSW7PnlI/hLWDA3tIpibUjo9Xlqp8+kboCuL4d2ueDjoumKTg2pU8DQiwn3yNWKF7fUMnt/OHjc5SHZ2D0h+12AAHmIrYSc12FOI6HRCU8vuSVCsHoERZCROePXjFgmcC2O65kXH0FgOXdMfxMcNKhZGaVUZcrcfZZnSjXhVd8TQ8kfLT63dmjqm5T9lHkCTLs8nALQmF0o59BOsAW+zcKG+dqPM1YPk6JLqx7X7kn1xK0OR0AotXTFA2gBlJbBgpUaeBZCug2w/zmrYrs7bu1xVI3HSJpvFRfMXu2/fSqvTx9L5VBYhARD6YIqa1QqIuJoGLofJ5pmRgtuMejX7+PFz3l0CITM0TEkgYuw9QNHuB86bSARzL2XKoURWcuF4PtPk=
+    secure: Uq2aLSuIFpCsUlAjAGRZG37eoPFrPEFt/em9E4raVCEtBsaumEy6tIOCrwiMlg49LQGUJs7v42HArKQyTQ96e+D6ox6BpQZHu3RYPt2cPe7w2AekjRfCMOGyp7KgMNfwD7tr6wgrhRWJQKD4boHnBRMUSWi+4OVdy4TNZT2Ou8IYcknfuA6INnbOljQUjZeUEw6JYXECzqqDPL9oP1Nd32N2TkXtZZELcrh3JXZvgSh9VgvMR6jOiu30NlJrNyMQmuWJxISUHfhKWkGpWB8et7Xbj+0vMY5/zfcomJ81GTdIMOBo4vFw8P+nHvvdCDx+NtyHURMTshUdcb/cCWc9hgxCe08dkKd1G9C15eAKgd4EUhXLm7OJ5ZcsXLHHVKDTzqkneL+eBLlIPknYYuIMgWRNJEgbSLE/9+nyvg28gDyGNFvcnpicX2qw6XpAD8vhuXXZ5r6H8MGwB8nQYlbW1jzV2mqvcELhAEkg3bAQ/2h7J5682KVJZ/+XwFE+uEpWJ9KUwPWGnb26ffL7gpRsvPzE+e/1xty75FsjwPqhYmmiR0ZcBQNyOxDF/APGuYpKx+jHGbUIOX9ck/aerG7HXcS2cEB1FCw6pRrvFvVZVeComlh2DYDXeAqAJ1AETae3Kc1CHoxmDahmzNsA8z0X/IaFptVb7KaSn/WPrlt+xfE=
   on:
     branch: master
-    repo: Nebo15/nebo15-mask
+    repo: rocket-mask/rocket-mask

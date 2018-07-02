@@ -3,15 +3,15 @@ var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 var path = require('path');
 var env = require('yargs').argv.mode;
 
-var libraryName = 'Nebo15Mask';
+var libraryName = 'RocketMask';
 
 var plugins = [], outputFile;
 
 if (env === 'build') {
   plugins.push(new UglifyJsPlugin({ minimize: true }));
-  outputFile = 'nebo15-mask' + '.min.js';
+  outputFile = 'rocket-mask' + '.min.js';
 } else {
-  outputFile = 'nebo15-mask' + '.js';
+  outputFile = 'rocket-mask' + '.js';
 }
 
 var config = {
