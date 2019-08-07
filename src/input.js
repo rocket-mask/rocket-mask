@@ -71,6 +71,17 @@ export default class MaskedInput extends Core {
       this.model = this.model || '';
     }
   }
+  
+  destroy() {
+    this._element.removeEventListener('change', this.onChange);
+    this._element.removeEventListener('input', this.onChange);
+    this._element.removeEventListener('keydown', this.onKeydown);
+    this._element.removeEventListener('paste', this.onPaste);
+    this._element.removeEventListener('cut', this.onCut);
+    this._element.removeEventListener('focus', this.onFocus);
+    this._element.removeEventListener('blur', this.onBlur);
+  }
+  
   get viewValue() {
     return this._element.value;
   }
