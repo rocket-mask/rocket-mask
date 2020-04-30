@@ -618,7 +618,7 @@ babel-types@^6.0.19, babel-types@^6.1.18, babel-types@^6.19.0, babel-types@^6.24
 
 babel@6.3.13:
   version "6.3.13"
-  resolved "http://registry.npmjs.org/babel/-/babel-6.3.13.tgz#9a366ce93cb24f620714c15144225c0aed37e39a"
+  resolved "https://registry.npmjs.org/babel/-/babel-6.3.13.tgz#9a366ce93cb24f620714c15144225c0aed37e39a"
 
 babylon@^6.0.18, babylon@^6.1.18, babylon@^6.18.0:
   version "6.18.0"
@@ -1718,8 +1718,8 @@ jade@0.26.3:
     mkdirp "0.3.0"
 
 jquery@^3.1.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.0.tgz#9980b97d9e4194611c36530e7dc46a58d7340fc9"
 
 js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
