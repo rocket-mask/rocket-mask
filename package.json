@@ -23,7 +23,7 @@
     "eslint": "1.7.2",
     "eslint-loader": "1.1.0",
     "jquery": "^3.1.1",
-    "jsdom": "^9.8.3",
+    "jsdom": "^16.5.0",
     "mocha": "2.3.4",
     "rimraf": "^2.6.1",
     "sinon": "^1.17.6",
